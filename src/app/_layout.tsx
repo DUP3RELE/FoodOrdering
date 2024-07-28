@@ -9,12 +9,11 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import CartProvider from "@/providers/CartProvider";
 
 import { useColorScheme } from "react-native";
 
-export {
-	ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
 	initialRouteName: "(tabs)",
@@ -50,16 +49,18 @@ function RootLayoutNav() {
 
 	return (
 		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-			<Stack>
-				<Stack.Screen
-					name='(tabs)'
-					options={{ headerShown: false }}
-				/>
-				<Stack.Screen
-					name='cart'
-					options={{ presentation: "modal" }}
-				/>
-			</Stack>
+			<CartProvider>
+				<Stack>
+					<Stack.Screen
+						name='(tabs)'
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name='cart'
+						options={{ presentation: "modal" }}
+					/>
+				</Stack>
+			</CartProvider>
 		</ThemeProvider>
 	);
 }
