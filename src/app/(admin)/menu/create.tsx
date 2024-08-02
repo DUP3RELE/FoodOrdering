@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import Button from "@/components/Button";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
+import * as ImagePicker from "expo-image-picker";
+import { Stack } from "expo-router";
 
 const CreateProductScreen = () => {
 	const [name, setName] = useState("");
 	const [price, setPrice] = useState("");
 	const [errors, setErrors] = useState("");
+	const [image, setImage] = useState<string | null>(null);
 
 	const resetFields = () => {
 		setName("");
@@ -38,13 +41,31 @@ const CreateProductScreen = () => {
 		resetFields();
 	};
 
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+		if (!result.canceled) {
+			setImage(result.assets[0].uri);
+		}
+	};
+
 	return (
 		<View style={styles.container}>
+			<Stack.Screen options={{ title: "Create Product" }} />
 			<Image
-				source={{ uri: defaultPizzaImage }}
+				source={{ uri: image || defaultPizzaImage }}
 				style={styles.image}
 			/>
-			<Text style={styles.textButton}>Select Image</Text>
+			<Text
+				onPress={pickImage}
+				style={styles.textButton}
+			>
+				Select Image
+			</Text>
 			<Text style={styles.label}>Name</Text>
 			<TextInput
 				value={name}
