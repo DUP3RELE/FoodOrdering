@@ -1,10 +1,11 @@
-import { StyleSheet, Text, Image, Pressable } from "react-native";
-import Colors from "@/constants/Colors";
-import { Order } from "@/types";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import { Order } from "../types";
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
 import { Link, useSegments } from "expo-router";
 
-export const defaultPizzaImage =
-	"https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
+dayjs.extend(relativeTime);
 
 type OrderListItemProps = {
 	order: Order;
@@ -15,33 +16,40 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
 
 	return (
 		<Link
-			href={`/${segments[0]}/menu/${order.id}`}
+			href={`/${segments[0]}/orders/${order.id}`}
 			asChild
 		>
 			<Pressable style={styles.container}>
-				<Text style={styles.title}>{order.created_at}</Text>
-				<Text style={styles.title}>{order.total}</Text>
-				<Text style={styles.price}>${order.status}</Text>
-				<Text>Go to details</Text>
+				<View>
+					<Text style={styles.title}>Order #{order.id}</Text>
+					<Text style={styles.time}>{dayjs(order.created_at).fromNow()}</Text>
+				</View>
+
+				<Text style={styles.status}>{order.status}</Text>
 			</Pressable>
 		</Link>
 	);
 };
 
-export default OrderListItem;
-
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: "white",
 		padding: 10,
-		borderRadius: 20,
-		flex: 1,
+		borderRadius: 10,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
 	},
-	title: { fontSize: 18, fontWeight: "600", marginVertical: 10 },
-
-	price: {
-		color: Colors.light.tint,
+	title: {
 		fontWeight: "bold",
+		marginVertical: 5,
 	},
-	image: { width: "100%", aspectRatio: 1 },
+	time: {
+		color: "gray",
+	},
+	status: {
+		fontWeight: "500",
+	},
 });
+
+export default OrderListItem;
