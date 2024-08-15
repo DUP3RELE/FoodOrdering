@@ -79,7 +79,7 @@ export const useInsertOrder = () => {
 			return newProduct;
 		},
 		async onSuccess() {
-			await queryClient.invalidateQueries(["orders"]);
+			await queryClient.invalidateQueries({ queryKey: ["orders"] });
 		},
 	});
 };
@@ -107,8 +107,8 @@ export const useUpdateOrder = () => {
 			return updatedOrder;
 		},
 		async onSuccess(_, data) {
-			await queryClient.invalidateQueries(["orders"]);
-			await queryClient.invalidateQueries(["orders", id]);
+			await queryClient.invalidateQueries({ queryKey: ["orders"] });
+			await queryClient.invalidateQueries({ queryKey: ["orders", data.id] });
 		},
 	});
 };
