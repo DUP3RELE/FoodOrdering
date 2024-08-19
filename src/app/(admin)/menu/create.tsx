@@ -85,12 +85,14 @@ const CreateProductScreen = () => {
 			}
 		);
 	};
-	const onUpdateCreate = () => {
+	const onUpdateCreate = async () => {
 		if (!validateInput()) {
 			return;
 		}
+
+		const imagePatch = await uploadImage();
 		updateProduct(
-			{ id, name, price: parseFloat(price), image },
+			{ id, name, price: parseFloat(price), imagePatch },
 			{
 				onSuccess: () => {
 					resetFields();
