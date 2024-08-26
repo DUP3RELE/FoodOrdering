@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 	},
 	text: {
-		fontSize: 16,
+		fontSize: 18,
 		fontWeight: "600",
 		color: "white",
 	},
